@@ -1,0 +1,9 @@
+
+
+X_POS = 4
+Y_POS = 5
+OBSTACLE_HIT = 8
+
+
+
+
