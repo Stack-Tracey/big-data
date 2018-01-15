@@ -3,66 +3,92 @@ import scipy.io
 import numpy as np
 import properties as pr
 import matplotlib.pyplot as plt
+import subject as sb
 
 # Raw data
 data = scipy.io.loadmat('Data/Data_BallGame_6pairs.mat.mat')
 data = data["data_over_trials"]
-print(data.shape) # (6,3) => 6 games with three columns, that are first player, second player, some information
-#print(data)
-# contains meta-information for all pairs in data
 meta = scipy.io.loadmat('Data/meta_info_6pairs.mat')
-meta = meta["meta_info"]
-print(meta.shape) # (6,2) => info for 6 games with two columns, that contain information about first player and second player
 
-pair0 = meta[0]
-pair1 = meta[1]
-print("Info player 1: %s" % pair0[0])
-print("Info player 2: %s" % pair0[1])
+game = 0
+player = 0
 
 # extract data from game 0
-game = 0
 (p1, p2, pair_meta) = data[game] #(info, frame, trial)
-#print(p1.shape) #(32, 961, 140)
-#print(p2.shape) # (21, 961, 140)
-#print(pair.shape) # (1,1)
+
+# prints the number of subjects and gender distribution among them
+def gender_distribution(card_sub, card_fem , card_male):
+  x = card_fem
+  y = card_male
+  card_game = 0
+  while card_game < len(data):
+    gender = sb.Subject(card_sub , card_game).sex()
+    if gender == 'f':
+      x = x + 1
+    else:
+      y = y + 1
+    card_game = card_game + 1
+  card_sub = card_sub + 1
+  if card_sub < 2:
+    gender_distribution(card_sub, x, y)
+  else:
+    print(len(data)*2, "subjects did attend \n")
+    print("%d are female \n" % x + "%d are male \n" % y)
+
+gender_distribution(0, 0, 0)
 
 
-pair = p1[pr.START_PAIR : pr.END_PAIR]
-print("Proximitry to obstacle", pair)
-print(pair_meta)
+# categorizes subjects into 3 age intervalls and prints tem out
+def age_distribution(card_sub, teen , twen, old):
+  x = teen
+  y = twen
+  z = old
+  card_game = 0
+  while card_game < len(data):
+    age = sb.Subject(card_sub , card_game).age()
+    if age <= 20:
+      x = x + 1
+    elif 21 <= age <= 30:
+      y = y + 1
+    else:
+      z = z + 1
+    card_game = card_game + 1
+  card_sub = card_sub + 1
+  if card_sub < 2:
+    age_distribution(card_sub, x, y, z)
+  else:
+    print("%d are younger that 20" % x)
+    print("%d are between 20 and 30" % y)
+    print("%d is older than 30 \n" % z)
 
-#####################################################################STOP ab hier macht es keinen Sinn mehr, der code kann weg
-# check who sees the obstacle in trial
-# first transform variables
+age_distribution(0, 0, 0, 0)
 
-trial = 139
-#good = p1[22][:][trial] #das 20tes property with
-#obstacle = p1[30][:][trial]
-#visible = p1[31][:][trial]
 
-#for n in p1[1]
 
-#print(max(obstacle))
+#pair = p1[pr.START_PAIR : pr.END_PAIR]
+#print("Proximitry to obstacle", pair)
+#print(pair_meta)
 
-#print("obstacle,visible for player,good play")
-#for frame in range(0, obstacle.shape[0]):
-#  print("%d,%d,%d" % (obstacle[frame], visible[frame], good[frame]))
 
-#print(p1[])
-
-#extract x and y coordinates of ball and if a obstacle was hit
+#returns x and y coordinates of ball and hits by obstacles
 hits = []
-
+trial = 120
 for frameNr in range(0, len(p1[1])):
   x = p1[pr.X_POS_BALL][frameNr][trial]
   y = p1[pr.Y_POS_BALL][frameNr][trial]
   hit = p1[pr.OBSTACLE_HIT][frameNr][trial]
   hits.append(hit)
-  print("x und y coordinate: %d %d and obstacle hit:%d" % (x,y, hit))
+ # print("x und y coordinate: %d %d and obstacle hit:%d" % (x,y, hit))
 
 # hits
-mainline = plt.plot(hits, 'r-', alpha=0.8) #der eigentlich plot
-plt.setp(mainline, color='red', linewidth=2.0)# einstellung zeichnung
+#mainline = plt.plot(hits, 'r-', alpha=0.8) #der eigentlich plot
+#plt.setp(mainline, color='red', linewidth=2.0)# einstellung zeichnung
 
 plt.ylabel('hits')
 plt.show()
+
+
+
+
+
+
