@@ -5,6 +5,41 @@ import properties as pr
 import matplotlib.pyplot as plt
 import subject as sb
 
+from gpanel import *
+
+#AnimEx1.py
+
+from gpanel import *
+import time
+
+makeGPanel(-6, 6, -220, 70)
+setColor("red")
+enableRepaint(False)
+
+g = 9.81
+dt= 0.05
+
+t = 0; y = 0
+v = 25
+
+while t < 10:
+  v = v - g * dt
+  y = y + v * dt
+  t = t + dt
+  drawGrid(-5, 5, -200, 50, "gray")
+  pos(0, y)
+  fillCircle(0.3)
+  repaint()
+  time.sleep(dt)
+  clear()
+keep()
+
+
+
+
+
+
+
 # Raw data
 data = scipy.io.loadmat('Data/Data_BallGame_6pairs.mat.mat')
 data = data["data_over_trials"]
@@ -81,8 +116,8 @@ for frameNr in range(0, len(p1[1])):
  # print("x und y coordinate: %d %d and obstacle hit:%d" % (x,y, hit))
 
 # hits
-#mainline = plt.plot(hits, 'r-', alpha=0.8) #der eigentlich plot
-#plt.setp(mainline, color='red', linewidth=2.0)# einstellung zeichnung
+mainline = plt.plot(hits, 'r-', alpha=0.8) #der eigentlich plot
+plt.setp(mainline, color='red', linewidth=2.0)# einstellung zeichnung
 
 plt.ylabel('hits')
 plt.show()
