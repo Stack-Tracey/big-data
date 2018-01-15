@@ -8,7 +8,7 @@ class Subject():
     def __init__(self, player, game):
         self.player = player
         self.game = game
-        self.p1_meta = meta[game][:][player]
+        self.p1_meta = meta[self.game][:][self.player]
 
     def number(self):
         subject_number = self.p1_meta["subject_number"][0][:][0][:][0][:][0]
