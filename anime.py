@@ -31,7 +31,6 @@ def animate_obstacle(i):
 def animate_target(i):
     if(tarhits[i]==1):
         target.center = pos[i]
-        print("is")
     return target,
 
 def animateAll(i):
