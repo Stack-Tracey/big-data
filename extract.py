@@ -1,43 +1,9 @@
 #!/usr/local/lib/python3.6
 import scipy.io
-import numpy as np
-import properties as pr
-import matplotlib.pyplot as plt
+
 import subject as sb
-
-from gpanel import *
-
-#AnimEx1.py
-
-from gpanel import *
-import time
-
-makeGPanel(-6, 6, -220, 70)
-setColor("red")
-enableRepaint(False)
-
-g = 9.81
-dt= 0.05
-
-t = 0; y = 0
-v = 25
-
-while t < 10:
-  v = v - g * dt
-  y = y + v * dt
-  t = t + dt
-  drawGrid(-5, 5, -200, 50, "gray")
-  pos(0, y)
-  fillCircle(0.3)
-  repaint()
-  time.sleep(dt)
-  clear()
-keep()
-
-
-
-
-
+import properties as pr
+from anime import runAnimation
 
 
 # Raw data
@@ -45,7 +11,7 @@ data = scipy.io.loadmat('Data/Data_BallGame_6pairs.mat.mat')
 data = data["data_over_trials"]
 meta = scipy.io.loadmat('Data/meta_info_6pairs.mat')
 
-game = 0
+game = 1
 player = 0
 
 # extract data from game 0
@@ -107,22 +73,27 @@ age_distribution(0, 0, 0, 0)
 
 #returns x and y coordinates of ball and hits by obstacles
 hits = []
+targethits = []
+positions = []
 trial = 120
 for frameNr in range(0, len(p1[1])):
   x = p1[pr.X_POS_BALL][frameNr][trial]
   y = p1[pr.Y_POS_BALL][frameNr][trial]
   hit = p1[pr.OBSTACLE_HIT][frameNr][trial]
+  target = p1[pr.TARGET_HIT_COL][frameNr][trial]
   hits.append(hit)
+  targethits.append(target)
+  positions.append((x, y))
  # print("x und y coordinate: %d %d and obstacle hit:%d" % (x,y, hit))
 
 # hits
-mainline = plt.plot(hits, 'r-', alpha=0.8) #der eigentlich plot
-plt.setp(mainline, color='red', linewidth=2.0)# einstellung zeichnung
+#mainline = plt.plot(hits, 'r-', alpha=0.8) #der eigentlich plot
+#plt.setp(mainline, color='red', linewidth=2.0)# einstellung zeichnung
 
-plt.ylabel('hits')
-plt.show()
+#plt.ylabel('hits')
+#plt.show()
 
-
+runAnimation(positions, hits, targethits)
 
 
 
